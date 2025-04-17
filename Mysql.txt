@@ -1,0 +1,13 @@
+//MYSQL 8
+
+CREATE DATABASE secure_coupon;
+
+USE secure_coupon;
+
+CREATE TABLE coupons (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50),
+    discount DOUBLE,
+    user VARCHAR(100),
+    blockchain_hash VARCHAR(256)
+);
