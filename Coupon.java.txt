@@ -1,0 +1,61 @@
+Coupon.java
+
+
+package model;
+
+public class Coupon {
+    private int id;
+    private String code;
+    private double discount;
+    private String user;
+    private String blockchainHash;
+
+    // Getters and Setters
+}
+
+CouponDAO.java
+
+package dao;
+
+import model.Coupon;
+import util.DBConnection;
+
+import java.sql.*;
+import java.util.ArrayList;
+
+public class CouponDAO {
+
+    public void insertCoupon(Coupon coupon) {
+        try (Connection con = DBConnection.getConnection()) {
+            String sql = "INSERT INTO coupons (code, discount, user, blockchain_hash) VALUES (?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, coupon.getCode());
+            ps.setDouble(2, coupon.getDiscount());
+            ps.setString(3, coupon.getUser());
+            ps.setString(4, coupon.getBlockchainHash());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Coupon> getAllCoupons() {
+        ArrayList<Coupon> list = new ArrayList<>();
+        try (Connection con = DBConnection.getConnection()) {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM coupons");
+            while (rs.next()) {
+                Coupon c = new Coupon();
+                c.setId(rs.getInt("id"));
+                c.setCode(rs.getString("code"));
+                c.setDiscount(rs.getDouble("discount"));
+                c.setUser(rs.getString("user"));
+                c.setBlockchainHash(rs.getString("blockchain_hash"));
+                list.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+}
